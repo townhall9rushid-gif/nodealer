@@ -35,6 +35,194 @@
         .logo {
             font-size: 32px;
             font-weight: bold;
+            background: linear-gradient(135deg, #23e5db 0%, #4CAF50 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            cursor: pointer;
+            letter-spacing: -1px;
+        }
+
+        .location-dropdown {
+            position: relative;
+        }
+
+        .location-btn {
+            background: none;
+            border: 2px solid #ffffff;
+            color: #ffffff;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .location-btn:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            margin-top: 8px;
+            background: white;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            min-width: 300px;
+            max-height: 400px;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        .dropdown-content.show {
+            display: block;
+        }
+
+        .location-search {
+            position: sticky;
+            top: 0;
+            background: white;
+            padding: 12px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .location-search input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .location-search input:focus {
+            border-color: #23e5db;
+        }
+
+        .use-location-btn {
+            width: 100%;
+            padding: 12px;
+            background: #f0f9ff;
+            border: none;
+            color: #1e88e5;
+            cursor: pointer;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .use-location-btn:hover {
+            background: #e3f2fd;
+        }
+
+        .location-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: background 0.2s;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .location-item:hover {
+            background: #f5f5f5;
+        }
+
+        .search-container {
+            flex: 1;
+            max-width: 500px;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #ffffff;
+            border-radius: 4px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .search-input:focus {
+            border-color: #23e5db;
+        }
+
+        .language-selector, .login-dropdown, .sell-btn-container {
+            position: relative;
+        }
+
+        .lang-btn, .login-btn {
+            background: none;
+            border: none;
+            color: #ffffff;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .sell-btn {
+            background: linear-gradient(135deg, #23e5db, #00bfa5);
+            border: none;
+            color: #002f34;
+            padding: 10px 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            box-shadow: 0 2px 8px rgba(35, 229, 219, 0.3);
+            transition: all 0.3s;
+        }
+
+        .sell-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(35, 229, 219, 0.4);
+        }<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NoDealer - Buy & Sell Cars and Bikes</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f8f8f8;
+        }
+
+        .header {
+            background-color: #002f34;
+            padding: 12px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 16px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: bold;
             color: white;
             text-decoration: none;
             padding: 8px 16px;
