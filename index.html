@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NoDealer - Buy & Sell Cars and Bikes</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f8f8f8;
+        }
+
+        .header {
+            background-color: #002f34;
+            padding: 12px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 16px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            background: linear-gradient(135deg, #3a77ff 0%, #00c853 100%);
+        }
+
+        .location-container {
+            position: relative;
+            min-width: 220px;
+        }
+
+        .location-select {
+            width: 100%;
+            padding: 12px 40px 12px 12px;
+            border: 2px solid #002f34;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+            background-color: white;
+            appearance: none;
+            background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%23002f34" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>');
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+        }
+
+        .current-location-btn {
+            margin-top: 8px;
+            width: 100%;
+            padding: 8px;
+            background-color: #23e5db;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            color: #002f34;
+        }
+
+        .current-location-btn:hover {
+            background-color: #1fcfc6;
+        }
+
+        .search-container {
+            flex: 1;
+            min-width: 300px;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 50px 12px 16px;
+            border: 2px solid #002f34;
+            border-radius: 4px;
+            font-size: 14px;
+            background-color: white;
+        }
+
+        .search-btn {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: #002f34;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            color: white;
+            font-weight: 600;
+        }
+
+        .search-btn:hover {
+            background-color: #003d44;
+        }
+
+        .language-select {
+            padding: 10px 32px 10px 12px;
+            border: 2px solid white;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            background-color: transparent;
+            color: white;
+            appearance: none;
+            background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>');
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+        }
+
+        .login-container {
+            position: relative;
+        }
+
+        .login-btn {
+            padding: 10px 32px 10px 12px;
+            border: 2px solid white;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            background-color: transparent;
+            color: white;
+            appearance: none;
+            background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>');
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+        }
+
+        .login-dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 8px;
+            background-color: white;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            min-width: 200px;
+            z-index: 1000;
+        }
+
+        .login-dropdown.active {
+            display: block;
+        }
+
+        .login-dropdown button {
+            display: block;
+            width: 100%;
+            padding: 12px 16px;
+            border: none;
+            background: none;
+            text-align: left;
+            cursor: pointer;
+            font-size: 14px;
+            color: #002f34;
+        }
+
+        .login-dropdown button:hover {
+            background-color: #f8f8f8;
+        }
+
+        .login-dropdown .create-account {
+            border-top: 1px solid #e0e0e0;
+            color: #3a77ff;
+            font-weight: 600;
+        }
+
+        .sell-btn {
+            padding: 10px 32px;
+            background: linear-gradient(135deg, #23e5db 0%, #3a77ff 100%);
+            border: none;
+            border-radius: 24px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            color: #002f34;
+            text-transform: uppercase;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .sell-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        @media (max-width: 768px) {
+            .header-container {
+                gap: 12px;
+            }
+
+            .logo {
+                font-size: 24px;
+                padding: 6px 12px;
+            }
+
+            .location-container {
+                width: 100%;
+                min-width: unset;
+            }
+
+            .search-container {
+                width: 100%;
+                min-width: unset;
+            }
+
+            .language-select, .login-btn {
+                padding: 8px 24px 8px 10px;
+                font-size: 13px;
+            }
+
+            .sell-btn {
+                padding: 8px 24px;
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-container">
+            <a href="#" class="logo">NoDealer</a>
+            
+            <div class="location-container">
+                <select class="location-select" id="locationSelect">
+                    <optgroup label="States">
+                        <option value="maharashtra">Maharashtra</option>
+                        <option value="delhi">Delhi</option>
+                        <option value="karnataka">Karnataka</option>
+                        <option value="tamil-nadu">Tamil Nadu</option>
+                    </optgroup>
+                    <optgroup label="Mumbai Areas">
+                        <option value="dahisar">Dahisar</option>
+                        <option value="goregaon">Goregaon</option>
+                        <option value="andheri">Andheri</option>
+                        <option value="borivali">Borivali</option>
+                    </optgroup>
+                </select>
+                <button class="current-location-btn" onclick="useCurrentLocation()">📍 Use current location</button>
+            </div>
+
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="Search for cars and bikes...">
+                <button class="search-btn">Search</button>
+            </div>
+
+            <select class="language-select" id="languageSelect" onchange="changeLanguage()">
+                <option value="en">English</option>
+                <option value="hi">हिंदी</option>
+                <option value="mr">मराठी</option>
+            </select>
+
+            <div class="login-container">
+                <button class="login-btn" onclick="toggleLogin()">Login</button>
+                <div class="login-dropdown" id="loginDropdown">
+                    <button onclick="loginWithGoogle()">Sign in with Google</button>
+                    <button onclick="loginWithEmail()">Sign in with Email</button>
+                    <button class="create-account" onclick="createAccount()">Create Account</button>
+                </div>
+            </div>
+
+            <button class="sell-btn" onclick="sellNow()">+ SELL</button>
+        </div>
+    </header>
+
+    <script>
+        function toggleLogin() {
+            const dropdown = document.getElementById('loginDropdown');
+            dropdown.classList.toggle('active');
+        }
+
+        document.addEventListener('click', function(event) {
+            const loginContainer = document.querySelector('.login-container');
+            const dropdown = document.getElementById('loginDropdown');
+            if (!loginContainer.contains(event.target)) {
+                dropdown.classList.remove('active');
+            }
+        });
+
+        function loginWithGoogle() {
+            alert('Google Sign-In would be implemented here with OAuth 2.0');
+        }
+
+        function loginWithEmail() {
+            alert('Email login form would be displayed here');
+        }
+
+        function createAccount() {
+            alert('Account creation form would be displayed here');
+        }
+
+        function useCurrentLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        const lat = position.coords.latitude;
+                        const lon = position.coords.longitude;
+                        alert(`Location detected: Latitude ${lat.toFixed(4)}, Longitude ${lon.toFixed(4)}\n\nIn production, this would auto-select your nearest area.`);
+                    },
+                    function(error) {
+                        alert('Unable to get your location. Please select manually.');
+                    }
+                );
+            } else {
+                alert('Geolocation is not supported by your browser.');
+            }
+        }
+
+        function changeLanguage() {
+            const lang = document.getElementById('languageSelect').value;
+            
+            const translations = {
+                en: {
+                    search: 'Search for cars and bikes...',
+                    location: 'Use current location'
+                },
+                hi: {
+                    search: 'कार और बाइक खोजें...',
+                    location: 'वर्तमान स्थान का उपयोग करें'
+                },
+                mr: {
+                    search: 'कार आणि बाईक शोधा...',
+                    location: 'वर्तमान स्थान वापरा'
+                }
+            };
+
+            document.querySelector('.search-input').placeholder = translations[lang].search;
+            document.querySelector('.current-location-btn').textContent = '📍 ' + translations[lang].location;
+        }
+
+        function sellNow() {
+            alert('Sell form would open here where you can list your car or bike!');
+        }
+    </script>
+</body>
+</html>
