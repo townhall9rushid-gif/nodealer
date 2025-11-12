@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - NoDealer</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: #f8f8f8; }
+        .container { max-width: 400px; margin: 80px auto; background: white; padding: 40px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: #002f34; margin-bottom: 30px; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border: 2px solid #ddd; border-radius: 4px; font-size: 14px; }
+        input:focus { outline: none; border-color: #002f34; }
+        button { width: 100%; padding: 14px; background: #002f34; color: white; border: none; border-radius: 4px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        button:hover { background: #003d47; }
+        .error { color: red; font-size: 14px; margin: 10px 0; }
+        .success { color: green; font-size: 14px; margin: 10px 0; }
+        .link { text-align: center; margin-top: 20px; }
+        .link a { color: #002f34; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Create Account - NoDealer</h1>
+        <form id="registerForm">
+            <input type="text" id="fullName" placeholder="Full Name" required>
+            <input type="email" id="email" placeholder="Email" required>
+            <input type="tel" id="phone" placeholder="Phone Number" required>
+            <input type="password" id="password" placeholder="Password (min 6 chars)" required>
+            <button type="submit">Register</button>
+        </form>
+        <div id="message"></div>
+        <div class="link">
+            <a href="login.html">Already have an account? Login</a>
+        </div>
+    </div>
+
+    <script>
+        const SUPABASE_URL = 'https://vycimtexfyzlmlywjrzd.supabase.co'
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ5Y2ltdGV4Znl6bG1seXdqcnpkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzE0MTY0NzIsImV4cCI6MjA0Njk5MjQ3Mn0.eyJpc3MiOiJJUzI1NiIsInRNashid-gif","role":"anon","iat":1731416472}'
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
+
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault()
+            const message = document.getElementById('message')
+            message.innerHTML = ''
+
+            const fullName = document.getElementById('fullName').value
+            const email = document.getElementById('email').value
+            const phone = document.getElementById('phone').value
+            const password = document.getElementById('password').value
+
+            try {
+                const { data, error } = await supabase.auth.signUp({
+                    email: email,
+                    password: password
+                })
+
+                if (error) throw error
+
+                if (data.user) {
+                    await supabase.from('profiles').insert({
+                        id: data.user.id,
+                        full_name: fullName,
+                        phone: phone
+                    })
+
+                    message.innerHTML = '<div class="success">Registration successful! Redirecting to login...</div>'
+                    setTimeout(() => window.location.href = 'login.html', 2000)
+                }
+            } catch (error) {
+                message.innerHTML = `<div class="error">${error.message}</div>`
+            }
+        })
+    </script>
+</body>
+</html>
