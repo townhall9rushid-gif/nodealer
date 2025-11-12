@@ -42,7 +42,7 @@
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
 
         document.getElementById('registerForm').addEventListener('submit', async (e) => {
-            e.preventDefault()
+                const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ5Y2ltdGV4Znl6bG1seXdqcnpkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzc4NDA5NTUsImV4cCI6MjA1MzQxNjk1NX0.qzW1U3Z8vKb1dBL4PHG_hGxwt8mKzL5tUOjl7ygDLJU'
             const message = document.getElementById('message')
             message.innerHTML = ''
 
