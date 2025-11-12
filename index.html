@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NoDealer - Buy & Sell Cars and Bikes</title>
+        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const supabase = window.supabase.createClient(
+            'https://vycimtexfyzlmlywjrzd.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ5Y2ltdGV4Znl6bG1seXdqcnpkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzc4NDA5NTUsImV4cCI6MjA1MzQxNjk1NX0.qzW1U3Z8vKb1dBL4PHG_hGxwt8mKzL5tUOjl7ygDLJU'
+        );
+    </script>
     <style>
         * {
             margin: 0;
@@ -458,10 +465,15 @@
 
             <div class="login-container">
                 <button class="login-btn" onclick="toggleLogin()">Login</button>
-                <div class="login-dropdown" id="loginDropdown">
-                    <button onclick="loginWithGoogle()">Sign in with Google</button>
-                    <button onclick="loginWithEmail()">Sign in with Email</button>
-                    <button class="create-account" onclick="createAccount()">Create Account</button>
+                <div 461
+                    
+                    -dropdown" id="loginDropdown">
+                                    <form id="loginForm" onsubmit="handleLogin(event)">
+                    <input type="email" id="loginEmail" placeholder="Email" required>
+                    <input type="password" id="loginPassword" placeholder="Password" required>
+                    <button type="submit">Login</button>
+                    <a href="register.html" class="register-link">Create Account</a>
+                </form>
                 </div>
             </div>
 
@@ -537,6 +549,28 @@
         function sellNow() {
             alert('Sell form would open here where you can list your car or bike!');
         }
+
+// Supabase Login Handler
+async function handleLogin(event) {
+    event.preventDefault();
+    
+    const email = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
+    
+    try {
+        const { data, error } = await supabase.auth.signInWithPassword({
+            email: email,
+            password: password
+        });
+        
+        if (error) throw error;
+        
+        alert('Login successful!');
+        window.location.href = 'index.html';
+    } catch (error) {
+        alert('Login failed: ' + error.message);
+    }
+}
     </script>
 </body>
 </html>
