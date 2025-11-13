@@ -1,3 +1,4 @@
+:57
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -54,24 +55,48 @@
             const password = document.getElementById('password').value
 
             try {
+                console.log('Starting registration...');
+                
+                console.log('Calling signUp...');
                 const { data, error } = await supabase.auth.signUp({
                     email: email,
                     password: password
-                })
-
-                if (error) throw error
-
-                if (data.user) {
-                    await supabase.from('profiles').insert({
-                        id: data.user.id,
-                        full_name: fullName,
-                        phone: phone
-                    })
-
-                    message.innerHTML = '<div class="success">Registration successful! Redirecting to login...</div>'
-                    setTimeout(() => window.location.href = 'login.html', 2000)
+                });
+                
+                console.log('SignUp response:', { data, error });
+                
+                if (error) {
+                    console.error('SignUp error:', error);
+                    throw error;
                 }
-            } catch (error) {
+                
+                if (data.user) {
+                    console.log('User created:', data.user.id);
+                    
+                    // Insert profile with error handling
+                    console.log('Inserting profile...');
+                    const { data: profileData, error: profileError } = await supabase
+                        .from('profiles')
+                        .insert({
+                            id: data.user.id,
+                            full_name: fullName,
+                            phone: phone
+                        });
+                    
+                    console.log('Profile insert response:', { profileData, profileError });
+                    
+                    if (profileError) {
+                        console.error('Profile insert error:', profileError);
+                        message.innerHTML = `<div class="error">Registration failed: ${profileError.message}</div>`;
+                        return;
+                    }
+                    
+                    message.innerHTML = '<div class="success">Registration successful! Redirecting to login...</div>';
+                    setTimeout(() => window.location.href = 'login.html', 2000);
+                } else {
+                    console.error('No user returned from signUp');
+                    throw new Error('Registration failed - no user created');
+                }tch (error) {
                 message.innerHTML = `<div class="error">${error.message}</div>`
             }
         })
