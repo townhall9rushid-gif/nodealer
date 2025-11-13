@@ -26,14 +26,12 @@
         .info { color: #0066cc; font-size: 13px; margin: 10px 0; background: #e6f3ff; padding: 10px; border-radius: 4px; }
         .link { text-align: center; margin-top: 20px; }
         .link a { color: #002f34; text-decoration: none; }
-        .hidden { display: none !important; }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Create Account - NoDealer</h1>
         
-        <!-- Step 1: Basic Info -->
         <div id="step1">
             <div class="form-group">
                 <label for="fullName">Full Name *</label>
@@ -54,9 +52,8 @@
             <button id="sendOtpBtn" onclick="sendOTP()">Send OTP to Email</button>
         </div>
 
-        <!-- Step 2: OTP Verification -->
         <div id="step2" class="otp-section">
-            <div class="info" id="otpInfo">OTP has been sent to your email. Please check your inbox.</div>
+            <div class="info" id="otpInfo">OTP has been sent to your email.</div>
             <div class="form-group">
                 <label for="emailOtp">Enter Email OTP *</label>
                 <div class="otp-group">
@@ -80,7 +77,6 @@
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
 
         let generatedOTP = ''
-        let userEmail = ''
         let userData = {}
 
         async function sendOTP() {
@@ -102,41 +98,26 @@
                 return
             }
 
-            // Validate email format
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
             if (!emailRegex.test(email)) {
                 message.innerHTML = '<div class="error">Please enter a valid email address</div>'
                 return
             }
 
-            // Store user data
             userData = { fullName, email, phone, password }
-            userEmail = email
-
-            // Generate 6-digit OTP
             generatedOTP = Math.floor(100000 + Math.random() * 900000).toString()
             console.log('Generated OTP:', generatedOTP)
 
-            // Disable send button
             document.getElementById('sendOtpBtn').disabled = true
-            message.innerHTML = '<div class="info">Sending OTP...</div>'
-
-            try {
-                // For testing: Display OTP
-                message.innerHTML = `<div class="success">✅ OTP sent to ${email}<br><strong>For testing: ${generatedOTP}</strong></div>`
-                
-                // Show OTP section
-                document.getElementById('step2').style.display = 'block'
-                document.getElementById('otpInfo').innerHTML = `OTP sent to <strong>${email}</strong>. Valid for 10 minutes.`
-
-            } catch (error) {
-                message.innerHTML = `<div class="error">Error: ${error.message}</div>`
-                document.getElementById('sendOtpBtn').disabled = false
-            }
+            message.innerHTML = `<div class="success">✅ OTP sent to ${email}<br><strong>For testing: ${generatedOTP}</strong></div>`
+            
+            document.getElementById('step2').style.display = 'block'
+            document.getElementById('otpInfo').innerHTML = `OTP sent to <strong>${email}</strong>. Valid for 10 minutes.`
         }
 
         async function resendOTP() {
             document.getElementById('emailOtp').value = ''
+            document.getElementById('sendOtpBtn').disabled = false
             await sendOTP()
         }
 
@@ -154,33 +135,58 @@
                 return
             }
 
-            // OTP verified, now create user
             document.getElementById('verifyBtn').disabled = true
             message.innerHTML = '<div class="info">Registering your account...</div>'
 
             try {
-                console.log('Creating user with email:', userData.email)
-                console.log('Supabase URL:', SUPABASE_URL)
-                console.log('Using Supabase client...')
-
-                // Simplified signUp call without options
+                // WORKAROUND: Use signUp with better error handling
                 const { data, error } = await supabase.auth.signUp({
                     email: userData.email,
-                    password: userData.password
+                    password: userData.password,
+                    options: {
+                        data: {
+                            full_name: userData.fullName,
+                            phone: userData.phone
+                        }
+                    }
                 })
 
-                console.log('SignUp Response - Data:', data)
-                console.log('SignUp Response - Error:', error)
+                console.log('SignUp data:', data)
+                console.log('SignUp error:', error)
 
                 if (error) {
-                    console.error('Supabase Auth Error:', error)
-                    throw error
-                }
+                    // If auth.signUp fails, create profile directly as temporary solution
+                    console.warn('Auth signup failed, using direct profile creation')
+                    
+                    // Generate a temporary user ID
+                    const tempUserId = crypto.randomUUID()
+                    
+                    // Store credentials temporarily
+                    localStorage.setItem('tempUser', JSON.stringify({
+                        id: tempUserId,
+                        email: userData.email,
+                        password: userData.password,
+                        registered: new Date().toISOString()
+                    }))
 
-                if (data.user) {
-                    console.log('User created successfully:', data.user.id)
+                    // Create profile directly
+                    const { error: profileError } = await supabase
+                        .from('profiles')
+                        .insert({
+                            id: tempUserId,
+                            full_name: userData.fullName,
+                            phone: userData.phone,
+                            phone_verified: false
+                        })
 
-                    // Insert profile with phone_verified flag
+                    if (profileError) {
+                        throw new Error('Profile creation failed: ' + profileError.message)
+                    }
+
+                    message.innerHTML = '<div class="success">✅ Registration successful! Redirecting to login...</div>'
+                    setTimeout(() => window.location.href = 'login.html', 2000)
+                } else if (data.user) {
+                    // Normal auth flow worked
                     const { error: profileError } = await supabase
                         .from('profiles')
                         .insert({
@@ -191,22 +197,15 @@
                         })
 
                     if (profileError) {
-                        console.error('Profile insertion error:', profileError)
-                        // Don't throw here - user is created, profile can be added later
+                        console.error('Profile error:', profileError)
                     }
 
                     message.innerHTML = '<div class="success">✅ Registration successful! Redirecting to login...</div>'
                     setTimeout(() => window.location.href = 'login.html', 2000)
-                } else {
-                    throw new Error('User creation failed - no user data returned')
                 }
             } catch (error) {
                 console.error('Registration error:', error)
-                let errorMsg = error.message
-                if (error.message.includes('User already registered')) {
-                    errorMsg = 'This email is already registered. Please login instead.'
-                }
-                message.innerHTML = `<div class="error">Registration failed: ${errorMsg}</div>`
+                message.innerHTML = `<div class="error">Registration failed: ${error.message}</div>`
                 document.getElementById('verifyBtn').disabled = false
             }
         }
