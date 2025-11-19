@@ -555,19 +555,79 @@ async function handleLogin(event) {
     const email = document.getElementById('loginEmail').value;
     const password = document.getElementById('loginPassword').value;
     
-    try {
-        const { data, error } = await supabase.auth.signInWithPassword({
-            email: email,
-            password: password
-        });
-        
-        if (error) throw error;
-        
+    try // Query profiles table directly
+        const { data: users, error: queryError } = await supabase
+            .from('profiles')
+            .select('*')
+            .eq('email', email)
+            .single()
+
+        if (queryError || !users) {
+            alert('Login failed: Invalid email or password');
+            return;
+        }
+
+        if (users.password !== password) {
+            alert('Login failed: Invalid email or password');
+            return;
+        }
+
+        // Store user session
+        localStorage.setItem('user', JSON.stringify({
+            id: users.id,
+            email: users.email,
+            full_name: users.full_name,
+            phone: users.phone,
+            phone_verified: users.phone_verified
+        }));
+
         alert('Login successful!');
-        window.location.href = 'index.html';
+        location.reload(); // Reload to show logged-in state
     } catch (error) {
         alert('Login failed: ' + error.message);
     }
+}
+}
+
+        // Check logged-in state on page load
+document.addEventListener('DOMContentLoaded', function() {
+    const userStr = localStorage.getItem('user');
+    if (userStr) {
+        try {
+            const user = JSON.parse(userStr);
+            
+            // Replace login button with user info
+            const loginContainer = document.querySelector('.login-container');
+            if (loginContainer) {
+                loginContainer.innerHTML = `
+                    <button class="login-btn" onclick="toggleUserMenu()">👤 ${user.full_name}</button>
+                    <div class="login-dropdown" id="userDropdown">
+                        <div style="padding: 12px; border-bottom: 1px solid #e0e0e0; background: #f8f8f8;">
+                            <div style="font-weight: bold;">${user.full_name}</div>
+                            <div style="font-size: 12px; color: #666;">${user.email}</div>
+                        </div>
+                        <button onclick="window.location.href='wishlist.html'">❤️ My Wishlist</button>
+                        <button onclick="window.location.href='orders.html'">📦 My Orders</button>
+                        <button onclick="logout()" style="color: red; border-top: 1px solid #e0e0e0;">Logout</button>
+                    </div>
+                `;
+            }
+        } catch (e) {
+            localStorage.removeItem('user');
+        }
+    }
+});
+
+function toggleUserMenu() {
+    const dropdown = document.getElementById('userDropdown');
+    if (dropdown) {
+        dropdown.classList.toggle('active');
+    }
+}
+
+function logout() {
+    localStorage.removeItem('user');
+    location.reload();
 }
     </script>
 </body>
