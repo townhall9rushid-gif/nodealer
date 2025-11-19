@@ -48,16 +48,33 @@
             const password = document.getElementById('password').value
 
             try {
-                const { data, error } = await supabase.auth.signInWithPassword({
-                    email: email,
-                    password: password
-                })
+                // Query profiles table directly for authentication
+            const { data: users, error: queryError } = await supabase
+                .from('profiles')
+                .select('*')
+                .eq('email', email)
+                .single()
 
-                if (error) throw error
+            if (queryError || !users) {
+                throw new Error('Invalid email or password')
+            }
 
-                message.innerHTML = '<div class="success">Login successful! Redirecting...</div>'
-                setTimeout(() => window.location.href = 'index.html', 1500)
-            } catch (error) {
+            // Check password match (in production, use hashed passwords)
+            if (users.password !== password) {
+                throw new Error('Invalid email or password')
+            }
+
+            // Store user session in localStorage
+            localStorage.setItem('user', JSON.stringify({
+                id: users.id,
+                email: users.email,
+                full_name: users.full_name,
+                phone: users.phone,
+                phone_verified: users.phone_verified
+            }))
+
+            message.innerHTML = '<div class="success">Login successful! Redirecting...</div>'
+            setTimeout(() => window.location.href = 'index.html', 1500)tch (error) {
                 message.innerHTML = `<div class="error">${error.message}</div>`
             }
         })
