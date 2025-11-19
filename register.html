@@ -139,75 +139,34 @@
             message.innerHTML = '<div class="info">Registering your account...</div>'
 
             try {
-                // WORKAROUND: Use signUp with better error handling
-                const { data, error } = await supabase.auth.signUp({
-                    email: userData.email,
-                    password: userData.password,
-                    options: {
-                        data: {
-                            full_name: userData.fullName,
-                            phone: userData.phone
-                        }
-                    }
-                })
+        // Generate UUID for user
+        const userId = crypto.randomUUID()
+        
+        // Insert directly into profiles table (bypassing Supabase Auth)
+        const { error: profileError } = await supabase
+            .from('profiles')
+            .insert({
+                id: userId,
+                full_name: userData.fullName,
+                email: userData.email,
+                phone: userData.phone,
+                password: userData.password,
+                phone_verified: false
+            })
 
-                console.log('SignUp data:', data)
-                console.log('SignUp error:', error)
+        if (profileError) {
+            throw new Error(profileError.message)
+        }
 
-                if (error) {
-                    // If auth.signUp fails, create profile directly as temporary solution
-                    console.warn('Auth signup failed, using direct profile creation')
-                    
-                    // Generate a temporary user ID
-                    const tempUserId = crypto.randomUUID()
-                    
-                    // Store credentials temporarily
-                    localStorage.setItem('tempUser', JSON.stringify({
-                        id: tempUserId,
-                        email: userData.email,
-                        password: userData.password,
-                        registered: new Date().toISOString()
-                    }))
+        message.innerHTML = '<div class="success">✅ Registration successful! Redirecting to login...</div>'
+        setTimeout(() => window.location.href = 'login.html', 2000)
 
-                    // Create profile directly
-                    const { error: profileError } = await supabase
-                        .from('profiles')
-                        .insert({
-                            id: tempUserId,
-                            full_name: userData.fullName,
-                            phone: userData.phone,
-                            phone_verified: false
-                        })
-
-                    if (profileError) {
-                        throw new Error('Profile creation failed: ' + profileError.message)
-                    }
-
-                    message.innerHTML = '<div class="success">✅ Registration successful! Redirecting to login...</div>'
-                    setTimeout(() => window.location.href = 'login.html', 2000)
-                } else if (data.user) {
-                    // Normal auth flow worked
-                    const { error: profileError } = await supabase
-                        .from('profiles')
-                        .insert({
-                            id: data.user.id,
-                            full_name: userData.fullName,
-                            phone: userData.phone,
-                            phone_verified: false
-                        })
-
-                    if (profileError) {
-                        console.error('Profile error:', profileError)
-                    }
-
-                    message.innerHTML = '<div class="success">✅ Registration successful! Redirecting to login...</div>'
-                    setTimeout(() => window.location.href = 'login.html', 2000)
-                }
-            } catch (error) {
-                console.error('Registration error:', error)
-                message.innerHTML = `<div class="error">Registration failed: ${error.message}</div>`
-                document.getElementById('verifyBtn').disabled = false
-            }
+    } catch (error) {
+        console.error('Registration error:', error)
+        message.innerHTML = `<div class="error">Registration failed: ${error.message}</div>`
+        document.getElementById('verifyBtn').disabled = false
+    }
+}}
         }
     </script>
 </body>
