@@ -53,24 +53,25 @@
                 .from('profiles')
                 .select('*')
                 .eq('email', email)
-                .single()
 
-            if (queryError || !users) {
+                            const user = users && users.length > 0 ? users[0] : null
+
+            if (queryError || !user) {
                 throw new Error('Invalid email or password')
             }
 
             // Check password match (in production, use hashed passwords)
-            if (users.password !== password) {
+            if (user..password !== password) {
                 throw new Error('Invalid email or password')
             }
 
             // Store user session in localStorage
             localStorage.setItem('user', JSON.stringify({
-                id: users.id,
-                email: users.email,
-                full_name: users.full_name,
-                phone: users.phone,
-                phone_verified: users.phone_verified
+                id: user..id,
+                email: user..email,
+                full_name: user..full_name,
+                phone: user..phone,
+                phone_verified: user..phone_verified
             }))
 
             message.innerHTML = '<div class="success">Login successful! Redirecting...</div>'
