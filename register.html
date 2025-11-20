@@ -143,16 +143,22 @@
         const userId = crypto.randomUUID()
         
         // Insert directly into profiles table (bypassing Supabase Auth)
-        const { error: profileError } = await supabase
-            .from('profiles')
-            .insert({
-                id: userId,
-                full_name: userData.fullName,
-                email: userData.email,
-                phone: userData.phone,
-                password: userData.password,
-                phone_verified: false
-            })
+        const response = await fetch('https://vycimtexfyzlmlywjrzd.supabase.co/rest/v1/profiles', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ5Y2ltdGV4Znl6bG1seXdqcnpkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzc4NDA5NTUsImV4cCI6MjA1MzQxNjk1NX0.qzW1U3Z8vKb1dBL4PHG_hGxwt8mKzL5tUOjl7ygDLJU'
+        },
+        body: JSON.stringify({
+          id: userId,
+          full_name: userData.fullName,
+          email: userData.email,
+          phone: userData.phone,
+          password: userData.password,
+          phone_verified: false
+        })
+      })
+      const profileError = response.ok ? null : new Error(`HTTP ${response.status}`)
 
         if (profileError) {
             throw new Error(profileError.message)
