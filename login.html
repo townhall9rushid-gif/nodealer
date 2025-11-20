@@ -47,7 +47,9 @@
             const email = document.getElementById('email').value
             const password = document.getElementById('password').value
 
-            try {
+            try
+            // Check localStorage for locally registered users
+            const storedUser = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null{
                 // Query profiles table directly for authentication
             const { data: users, error: queryError } = await supabase
                 .from('profiles')
@@ -56,12 +58,16 @@
 
                             const user = users && users.length > 0 ? users[0] : null
 
-            if (queryError || !user) {
+            if (queryError || !user) && !storedUser) {
                 throw new Error('Invalid email or password')
             }
+            // Use storedUser if user from database is null
+    if (!user && storedUser) {
+        user = storedUser
+    }
 
             // Check password match (in production, use hashed passwords)
-            if (user.password !== password) {
+            if (user.password && user.password !== password) {
                 throw new Error('Invalid email or password')
             }
 
