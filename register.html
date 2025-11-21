@@ -108,12 +108,26 @@
             generatedOTP = Math.floor(100000 + Math.random() * 900000).toString()
             console.log('Generated OTP:', generatedOTP)
 
-            document.getElementById('sendOtpBtn').disabled = true
-            message.innerHTML = `<div class="success">✅ OTP sent to ${email}<br><strong>For testing: ${generatedOTP}</strong></div>`
-            
-            document.getElementById('step2').style.display = 'block'
-            document.getElementById('otpInfo').innerHTML = `OTP sent to <strong>${email}</strong>. Valid for 10 minutes.`
-        }
+    // Call API to send OTP
+    try {
+      const response = await fetch('/api/send-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, phone, otp: generatedOTP })
+      });
+      const result = await response.json();
+      if (result.success) {
+        message.innerHTML = '<div class="success">✅ OTP sent to ' + email + '<br><em>Please check your email</em></div>';
+        document.getElementById('step2').style.display = 'block';
+        document.getElementById('otpInfo').innerHTML = 'OTP sent to <strong>' + email + '</strong>. Valid for 10 minutes.';
+      } else {
+        throw new Error(result.error || 'Failed to send OTP');
+      }
+    } catch (error) {
+      message.innerHTML = '<div class="error">❌ Error: ' + error.message + '. The OTP displayed for testing: ' + generatedOTP + '</div>';
+      document.getElementById('step2').style.display = 'block';
+    }
+    document.getElementById('sendOtpBtn').disabled = true;        }
 
         async function resendOTP() {
             document.getElementById('emailOtp').value = ''
