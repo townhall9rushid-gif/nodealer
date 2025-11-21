@@ -484,14 +484,6 @@
             dropdown.classList.toggle('active');
         }
 
-        document.addEventListener('click', function(event) {
-            const loginContainer = document.querySelector('.login-container');
-            const dropdown = document.getElementById('loginDropdown');
-            if (!loginContainer.contains(event.target)) {
-                dropdown.classList.remove('active');
-            }
-        });
-
         function loginWithGoogle() {
             alert('Google Sign-In would be implemented here with OAuth 2.0');
         }
