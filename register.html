@@ -107,6 +107,7 @@
             userData = { fullName, email, phone, password }
             generatedOTP = Math.floor(100000 + Math.random() * 900000).toString()
             console.log('Generated OTP:', generatedOTP)
+                localStorage.setItem('testOTP', generatedOTP); // Store OTP for testing
 
     // Call API to send OTP
     try {
