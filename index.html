@@ -581,8 +581,7 @@ async function handleLogin(event) {
     const email = document.getElementById('loginEmail').value;
     const password = document.getElementById('loginPassword').value;
     
-    try // Query profiles table directly
-        const { data: users, error: queryError } = await supabase
+try {        const { data: users, error: queryError } = await supabase
             .from('profiles')
             .select('*')
             .eq('email', email)
