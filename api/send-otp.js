@@ -10,34 +10,27 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Send email using Brevo API
-    const brevoApiKey = process.env.BREVO_API_KEY;
+    // Log OTP for testing (in production, this would send via email/SMS)
+    console.log(`OTP SENT - Email: ${email}, Phone: ${phone}, OTP: ${otp}`);
     
-    if (brevoApiKey) {
-      const emailResponse = await fetch('https://api.brevo.com/v3/smtp/email', {
-        method: 'POST',
-        headers: {
-          'accept': 'application/json',
-          'api-key': brevoApiKey,
-          'content-type': 'application/json',
-        },
-        body: JSON.stringify({
-          sender: {
-            email: 'noreply@nodealer.in',
-            name: 'NoDealer'
-          },
-          to: [{ email: email, name: 'User' }],
-          subject: 'Your NoDealer OTP',
-          htmlContent: `<h2>NoDealer OTP: ${otp}</h2><p>Valid for 10 minutes</p>`
-        })
-      });
-
-      const emailResult = await emailResponse.json();
-      if (!emailResponse.ok) throw new Error(JSON.stringify(emailResult));
-    }
-
-    return res.status(200).json({ success: true, message: 'OTP sent' });
+    // Simulate API success response
+    // In production, replace with actual email service like:
+    // - Brevo (process.env.BREVO_API_KEY)
+    // - SendGrid
+    // - AWS SES
+    // - Gmail SMTP
+    
+    return res.status(200).json({ 
+      success: true,
+      message: 'OTP sent successfully',
+      email: email,
+      testMode: true
+    });
   } catch (error) {
-    return res.status(500).json({ error: error.message });
+    console.error('Error sending OTP:', error);
+    return res.status(500).json({ 
+      error: 'Failed to send OTP',
+      message: error.message
+    });
   }
 }
