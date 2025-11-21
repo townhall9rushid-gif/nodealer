@@ -78,7 +78,8 @@
         let generatedOTP = ''
         let userData = {}
 
-        async function sendOTP() {
+        81
+            () {
             const message = document.getElementById('message')
             message.innerHTML = ''
                 try { document.getElementById('step2').style.display = 'block'; } catch(e) {}
@@ -106,8 +107,8 @@
 
             userData = { fullName, email, phone, password }
             generatedOTP = Math.floor(100000 + Math.random() * 900000).toString()
-            console.log('Generated OTP:', generatedOTP)
-                localStorage.setItem('testOTP', generatedOTP); // Store OTP for testing
+            
+                
 
     // Call API to send OTP
     try {
@@ -125,8 +126,9 @@
         throw new Error(result.error || 'Failed to send OTP');
       }
     } catch (error) {
-      message.innerHTML = '<div class="error">❌ Error: ' + error.message + '. The OTP displayed for testing: ' + generatedOTP + '</div>';
-      document.getElementById('step2').style.display = 'block';
+      console.error('Failed to send OTP:', error);
+            message.innerHTML = '<div class="error">❌ Failed to send OTP. Please try again.</div>';
+      
     }
     document.getElementById('sendOtpBtn').disabled = true;        }
 
