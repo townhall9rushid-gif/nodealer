@@ -78,8 +78,8 @@
         let generatedOTP = ''
         let userData = {}
 
-        81
-            () {
+        81async function sendOTP()  {
+
             const message = document.getElementById('message')
             message.innerHTML = ''
                 try { document.getElementById('step2').style.display = 'block'; } catch(e) {}
