@@ -1,3 +1,5 @@
+import { Resend } from 'resend';
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -10,25 +12,38 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Log OTP for testing (in production, this would send via email/SMS)
-    console.log(`OTP SENT - Email: ${email}, Phone: ${phone}, OTP: ${otp}`);
-    
-    // Simulate API success response
-    // In production, replace with actual email service like:
-    // - Brevo (process.env.BREVO_API_KEY)
-    // - SendGrid
-    // - AWS SES
-    // - Gmail SMTP
-    
-    return res.status(200).json({ 
+    // Initialize Resend with API key from environment variables
+    const resend = new Resend(process.env.RESEND_API_KEY);
+
+    // Send OTP email using Resend
+    const data = await resend.emails.send({
+      from: 'NoDealer <onboarding@resend.dev>',
+      to: [email],
+      subject: 'Your NoDealer Registration OTP',
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <h2 style="color: #333;">Welcome to NoDealer!</h2>
+          <p>Your One-Time Password (OTP) for registration is:</p>
+          <div style="background-color: #f4f4f4; padding: 15px; text-align: center; font-size: 32px; font-weight: bold; letter-spacing: 5px; margin: 20px 0;">
+            ${otp}
+          </div>
+          <p>This OTP is valid for 10 minutes.</p>
+          <p>If you didn't request this, please ignore this email.</p>
+          <p style="color: #666; font-size: 12px; margin-top: 30px;">This is an automated message from NoDealer.</p>
+        </div>
+      `,
+    });
+
+    console.log('OTP email sent successfully:', data);
+
+    return res.status(200).json({
       success: true,
-      message: 'OTP sent successfully',
+      message: 'OTP sent successfully to your email',
       email: email,
-      testMode: true
     });
   } catch (error) {
-    console.error('Error sending OTP:', error);
-    return res.status(500).json({ 
+    console.error('Error sending OTP email:', error);
+    return res.status(500).json({
       error: 'Failed to send OTP',
       message: error.message
     });
