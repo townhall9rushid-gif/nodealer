@@ -17,8 +17,7 @@ export default async function handler(req, res) {
 
     // Send OTP email using Resend
     const data = await resend.emails.send({
-      from: 'NoDealer <onboarding@resend.dev>',
-      to: [email],
+      from: 'onboarding@resend.dev',      to: [email],
       subject: 'Your NoDealer Registration OTP',
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
@@ -42,7 +41,7 @@ export default async function handler(req, res) {
       email: email,
     });
   } catch (error) {
-    console.error('Error sending OTP email:', error);
+    console.error('Error sending OTP email:', JSON.stringify(error, null, 2));
     return res.status(500).json({
       error: 'Failed to send OTP',
       message: error.message
