@@ -126,8 +126,7 @@
       }
     } catch (error) {
       console.error('Failed to send OTP:', error);
-            message.innerHTML = '<div class="error">❌ Failed to send OTP. Please try again.</div>';
-      
+                message.innerHTML = '<div class="error">❌ ' + (error.message || 'Failed to send OTP. Please try again.') + '</div>';      
     }
     document.getElementById('sendOtpBtn').disabled = true;        }
 
