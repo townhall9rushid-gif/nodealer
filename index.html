@@ -475,6 +475,48 @@
                 font-size: 13px;
             }
         }
+    /* HERO SECTION STYLES */
+    .hero { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 80px 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; color: white; min-height: 600px; }
+    .hero-content h1 { font-size: 48px; font-weight: 800; margin-bottom: 20px; line-height: 1.2; }
+    .hero-content > p { font-size: 20px; margin-bottom: 40px; opacity: 0.9; }
+    .hero-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-bottom: 40px; }
+    .stat-item h3 { font-size: 32px; font-weight: 700; margin-bottom: 5px; }
+    .stat-item p { font-size: 14px; opacity: 0.8; }
+    .cta-button { background: white; color: #667eea; padding: 16px 40px; border: none; border-radius: 50px; font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+    .cta-button:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(0,0,0,0.3); }
+    .hero-image { font-size: 120px; text-align: center; animation: float 3s ease-in-out infinite; }
+    @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-20px); } }
+    /* FEATURES SECTION */
+    .features { padding: 80px 20px; background: #f8f9ff; text-align: center; }
+    .features h2 { font-size: 42px; margin-bottom: 60px; color: #002f34; font-weight: 800; }
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto; }
+    .feature-card { background: white; padding: 40px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); transition: all 0.3s ease; text-align: center; }
+    .feature-card:hover { transform: translateY(-10px); box-shadow: 0 15px 40px rgba(102, 126, 234, 0.15); }
+    .feature-icon { font-size: 48px; margin-bottom: 20px; }
+    .feature-card h3 { font-size: 20px; margin-bottom: 15px; color: #002f34; font-weight: 700; }
+    .feature-card p { color: #666; line-height: 1.6; font-size: 14px; }
+    /* HOW IT WORKS */
+    .how-it-works { padding: 80px 20px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; text-align: center; }
+    .how-it-works h2 { font-size: 42px; margin-bottom: 60px; font-weight: 800; }
+    .steps-container { display: flex; justify-content: center; align-items: center; gap: 30px; flex-wrap: wrap; max-width: 1000px; margin: 0 auto; }
+    .step { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); padding: 30px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.2); flex: 1; min-width: 200px; }
+    .step-number { width: 50px; height: 50px; background: white; color: #f5576c; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700; margin: 0 auto 15px; }
+    .step h3 { font-size: 20px; margin-bottom: 10px; font-weight: 700; }
+    .arrow { font-size: 28px; color: white; opacity: 0.7; }
+    /* FOOTER SECTION */
+    .footer { background: #1a1a2e; color: #eee; padding: 60px 20px; }
+    .footer-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; max-width: 1200px; margin: 0 auto 40px; }
+    .footer-column h4 { font-size: 18px; font-weight: 700; margin-bottom: 20px; color: #23e5db; }
+    .footer-column p { line-height: 1.8; color: #aaa; font-size: 14px; margin-bottom: 10px; }
+    .footer-column ul { list-style: none; }
+    .footer-column ul li { margin-bottom: 12px; }
+    .footer-column ul li a { color: #aaa; text-decoration: none; transition: color 0.3s ease; font-size: 14px; }
+    .footer-column ul li a:hover { color: #23e5db; }
+    .social-links { display: flex; gap: 15px; margin-top: 20px; }
+    .social-icon { font-size: 24px; transition: transform 0.3s ease; cursor: pointer; }
+    .social-icon:hover { transform: scale(1.2); }
+    .footer-bottom { border-top: 1px solid #333; padding-top: 30px; text-align: center; color: #888; font-size: 14px; }
+    @media (max-width: 768px) { .hero { grid-template-columns: 1fr; padding: 50px 20px; } .hero-content h1 { font-size: 32px; } .hero-image { font-size: 80px; } .features h2, .how-it-works h2 { font-size: 28px; } .steps-container { flex-direction: column; } .arrow { display: none; } .footer-container { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
@@ -530,6 +572,145 @@
     <script>
         function toggleLogin() {
             const dropdown = document.getElementById('loginDropdown');
+                <!-- HERO SECTION -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Buy & Sell Cars and Bikes Instantly</h1>
+            <p>India's Fastest Growing P2P Marketplace for Vehicles</p>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <h3>50K+</h3>
+                    <p>Active Listings</p>
+                </div>
+                <div class="stat-item">
+                    <h3>10K+</h3>
+                    <p>Happy Users</p>
+                </div>
+                <div class="stat-item">
+                    <h3>100%</h3>
+                    <p>Verified Sellers</p>
+                </div>
+            </div>
+            <button class="cta-button" onclick="window.location.href='dashboard.html'">Browse Listings Now</button>
+        </div>
+        <div class="hero-image">
+            🚗 🏍️ 🚙
+        </div>
+    </section>
+    <!-- FEATURES SECTION -->
+    <section class="features">
+        <h2>Why Choose NodeAler?</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">✅</div>
+                <h3>100% Verified Sellers</h3>
+                <p>All sellers are verified and authenticated through OTP verification system</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💬</div>
+                <h3>Real-Time Chat</h3>
+                <p>Connect directly with buyers/sellers through our secure messaging platform</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📍</div>
+                <h3>Location Based Search</h3>
+                <p>Find vehicles near you with advanced filtering by location, price, and type</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⭐</div>
+                <h3>Ratings & Reviews</h3>
+                <p>Transparent rating system helps you make informed decisions</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔒</div>
+                <h3>Secure Transactions</h3>
+                <p>Safe and secure platform for buyer-seller interactions</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🚀</div>
+                <h3>Quick Listing</h3>
+                <p>List your vehicle in minutes with our simple 3-step process</p>
+            </div>
+        </div>
+    </section>
+    <!-- HOW IT WORKS SECTION -->
+    <section class="how-it-works">
+        <h2>How It Works</h2>
+        <div class="steps-container">
+            <div class="step">
+                <div class="step-number">1</div>
+                <h3>Create Account</h3>
+                <p>Sign up with your email or phone number in seconds</p>
+            </div>
+            <div class="arrow">→</div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <h3>Browse or List</h3>
+                <p>Search listings or post your vehicle with photos and details</p>
+            </div>
+            <div class="arrow">→</div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <h3>Connect & Deal</h3>
+                <p>Message sellers/buyers and finalize the transaction</p>
+            </div>
+        </div>
+    </section>
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-column">
+                <h4>About NodeAler</h4>
+                <p>NodeAler is India's fastest growing peer-to-peer marketplace for buying and selling cars and bikes. We connect buyers and sellers directly for hassle-free transactions.</p>
+                <div class="social-links">
+                    <a href="#" class="social-icon">📘</a>
+                    <a href="#" class="social-icon">🐦</a>
+                    <a href="#" class="social-icon">📷</a>
+                    <a href="#" class="social-icon">💼</a>
+                </div>
+            </div>
+            <div class="footer-column">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="dashboard.html">Browse Listings</a></li>
+                    <li><a href="#">Sell Your Vehicle</a></li>
+                    <li><a href="#">My Account</a></li>
+                    <li><a href="#">Help Center</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Categories</h4>
+                <ul>
+                    <li><a href="#">Cars for Sale</a></li>
+                    <li><a href="#">Bikes for Sale</a></li>
+                    <li><a href="#">Trucks</a></li>
+                    <li><a href="#">Used Vehicles</a></li>
+                    <li><a href="#">New Vehicles</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Support</h4>
+                <ul>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms & Conditions</a></li>
+                    <li><a href="#">Safety Tips</a></li>
+                    <li><a href="#">Report Issue</a></li>
+                    <li><a href="#">Feedback</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Contact Info</h4>
+                <p><strong>Email:</strong> support@nodealer.in</p>
+                <p><strong>Phone:</strong> +91-XXXX-XXXX</p>
+                <p><strong>Address:</strong><br>Mumbai, Maharashtra, India</p>
+                <p><strong>Hours:</strong><br>Mon-Sun: 9:00 AM - 10:00 PM</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 NodeAler. All rights reserved. | Made with ❤️ by Ritvik Thumbre</p>
+        </div>
+    </footer>
             dropdown.classList.toggle('active');
         }
 
