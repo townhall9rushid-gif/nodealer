@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - NodeAler</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background-color: #f8f8f8; }
+        .header { background: linear-gradient(135deg, #002f34, #1a5f6a); color: white; padding: 12px 0; }
+        .header-container { max-width: 1280px; margin: 0 auto; padding: 0 16px; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 28px; font-weight: bold; cursor: pointer; }
+        .nav-links { display: flex; gap: 20px; }
+        .nav-links a { color: white; text-decoration: none; font-weight: 500; }
+        .main-container { max-width: 1000px; margin: 30px auto; padding: 0 16px; }
+        .profile-header { background: white; padding: 30px; border-radius: 8px; display: grid; grid-template-columns: 150px 1fr; gap: 30px; align-items: start; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .profile-avatar { width: 150px; height: 150px; border-radius: 50%; background: linear-gradient(135deg, #23e5db, #00bfa5); display: flex; align-items: center; justify-content: center; font-size: 64px; }
+        .profile-info h1 { font-size: 28px; margin-bottom: 8px; color: #002f34; }
+        .profile-info .rating { color: #666; font-size: 14px; margin-bottom: 12px; }
+        .profile-info .bio { color: #666; margin-bottom: 16px; }
+        .profile-actions { display: flex; gap: 12px; }
+        .btn { padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; transition: all 0.3s; }
+        .btn-primary { background: linear-gradient(135deg, #23e5db, #00bfa5); color: #002f34; }
+        .btn-secondary { background: #002f34; color: white; }
+        .tabs { display: flex; gap: 0; border-bottom: 2px solid #ddd; margin-bottom: 20px; }
+        .tab-btn { padding: 12px 20px; background: none; border: none; cursor: pointer; font-weight: 600; color: #666; border-bottom: 3px solid transparent; }
+        .tab-btn.active { color: #23e5db; border-bottom-color: #23e5db; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .listings-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
+        .listing-card { background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .listing-card img { width: 100%; height: 150px; background: #ddd; display: flex; align-items: center; justify-content: center; font-size: 48px; }
+        .listing-info { padding: 12px; }
+        .listing-title { font-weight: bold; font-size: 14px; margin-bottom: 4px; }
+        .listing-price { color: #23e5db; font-weight: bold; font-size: 14px; }
+        .reviews-section { background: white; padding: 20px; border-radius: 8px; }
+        .review-item { padding: 16px; border-bottom: 1px solid #eee; }
+        .review-item:last-child { border-bottom: none; }
+        .review-header { display: flex; justify-content: space-between; margin-bottom: 8px; }
+        .reviewer-name { font-weight: bold; }
+        .review-rating { color: #f39c12; }
+        .review-text { color: #666; line-height: 1.5; }
+        @media (max-width: 768px) {
+            .profile-header { grid-template-columns: 1fr; gap: 16px; }
+            .profile-avatar { width: 100px; height: 100px; font-size: 48px; margin: 0 auto; }
+            .tabs { flex-wrap: wrap; }
+            .tab-btn { padding: 10px 16px; font-size: 14px; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-container">
+            <a href="index.html" class="logo">🚀 NodeAler</a>
+            <nav class="nav-links">
+                <a href="dashboard.html">Browse</a>
+                <a href="profile.html">Profile</a>
+                <a href="messages.html">Messages</a>
+                <a href="index.html">Logout</a>
+            </nav>
+        </div>
+    </header>
+    <div class="main-container">
+        <div class="profile-header">
+            <div class="profile-avatar">👤</div>
+            <div class="profile-info">
+                <h1>Rajesh Kumar</h1>
+                <div class="rating">⭐ 4.8 (125 reviews) | Member since 2022</div>
+                <div class="bio">Trusted seller with 500+ successful transactions. Fast responder, secure payments.</div>
+                <div class="profile-actions">
+                    <button class="btn btn-primary">Edit Profile</button>
+                    <button class="btn btn-secondary">🔔 Notifications</button>
+                </div>
+            </div>
+        </div>
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('listings')">My Listings</button>
+            <button class="tab-btn" onclick="switchTab('reviews')">Reviews</button>
+            <button class="tab-btn" onclick="switchTab('sold')">Sold Items</button>
+            <button class="tab-btn" onclick="switchTab('settings')">Settings</button>
+        </div>
+        <div id="listings" class="tab-content active">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <h2>My Active Listings (3)</h2>
+                <button class="btn btn-primary">+ Add Listing</button>
+            </div>
+            <div class="listings-grid">
+                <div class="listing-card">
+                    <div style="height: 150px; background: #ddd; display: flex; align-items: center; justify-content: center; font-size: 48px;">🚗</div>
+                    <div class="listing-info">
+                        <div class="listing-title">2020 Honda City</div>
+                        <div class="listing-price">₹8.5L</div>
+                        <button class="btn" style="width: 100%; margin-top: 8px; background: #f0f0f0; color: #333; padding: 6px;">Edit</button>
+                    </div>
+                </div>
+                <div class="listing-card">
+                    <div style="height: 150px; background: #ddd; display: flex; align-items: center; justify-content: center; font-size: 48px;">🏍️</div>
+                    <div class="listing-info">
+                        <div class="listing-title">Royal Enfield 350</div>
+                        <div class="listing-price">₹1.75L</div>
+                        <button class="btn" style="width: 100%; margin-top: 8px; background: #f0f0f0; color: #333; padding: 6px;">Edit</button>
+                    </div>
+                </div>
+                <div class="listing-card">
+                    <div style="height: 150px; background: #ddd; display: flex; align-items: center; justify-content: center; font-size: 48px;">🚙</div>
+                    <div class="listing-info">
+                        <div class="listing-title">Hyundai Creta</div>
+                        <div class="listing-price">₹12L</div>
+                        <button class="btn" style="width: 100%; margin-top: 8px; background: #f0f0f0; color: #333; padding: 6px;">Edit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="reviews" class="tab-content">
+            <h2 style="margin-bottom: 16px;">Buyer Reviews (125)</h2>
+            <div class="reviews-section">
+                <div class="review-item">
+                    <div class="review-header">
+                        <span class="reviewer-name">Amit Singh</span>
+                        <span class="review-rating">⭐⭐⭐⭐⭐</span>
+                    </div>
+                    <div class="review-text">"Excellent seller! Genuine vehicle, transparent pricing, no hidden charges. Highly recommended."</div>
+                </div>
+                <div class="review-item">
+                    <div class="review-header">
+                        <span class="reviewer-name">Priya Sharma</span>
+                        <span class="review-rating">⭐⭐⭐⭐⭐</span>
+                    </div>
+                    <div class="review-text">"Very professional and responsive. Helped me through the entire buying process. Best experience!"</div>
+                </div>
+            </div>
+        </div>
+        <div id="sold" class="tab-content">
+            <h2 style="margin-bottom: 16px;">Recently Sold (12)</h2>
+            <p style="color: #666;">You have sold 12 items successfully. Total sales value: ₹45.2L</p>
+        </div>
+        <div id="settings" class="tab-content">
+            <div style="background: white; padding: 20px; border-radius: 8px;">
+                <h2 style="margin-bottom: 16px;">Account Settings</h2>
+                <form style="display: grid; gap: 16px;">
+                    <div>
+                        <label style="display: block; margin-bottom: 6px; font-weight: 600;">Email</label>
+                        <input type="email" value="rajesh@example.com" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+                    </div>
+                    <div>
+                        <label style="display: block; margin-bottom: 6px; font-weight: 600;">Phone</label>
+                        <input type="tel" value="+91 98765 43210" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+                    </div>
+                    <button type="button" class="btn btn-primary">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>
