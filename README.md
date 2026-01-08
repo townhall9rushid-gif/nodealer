@@ -1,4 +1,4 @@
-# 🚀 NodeAler - AI-Powered Property & Vehicle Marketplace
+# 🚀 Property & Vehicle Marketplace
 
 **An OLX-like e-commerce platform built to scale.** Buy, sell, and connect instantly with real-time features, secure authentication, and advanced search capabilities.
 
